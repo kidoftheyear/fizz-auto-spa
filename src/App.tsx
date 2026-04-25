@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { 
   ShieldCheck, 
   Droplets, 
@@ -12,13 +12,14 @@ import {
   ChevronRight,
   Clock,
   Sparkles,
-  Truck
+  Truck,
+  X
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
 // --- Components ---
 
-const Navbar = () => {
+const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ const Navbar = () => {
             <Phone size={14} />
             <span className="font-mono text-xs font-bold tracking-tight">(256)-800-2675</span>
           </a>
-          <button className="px-6 py-2 border border-white text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+          <button onClick={onOpenModal} className="px-6 py-2 border border-white text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
             Book Online 24/7
           </button>
         </div>
@@ -152,7 +153,7 @@ const ValueProps = () => {
   );
 };
 
-const Services = () => {
+const Services = ({ onOpenModal }: { onOpenModal: () => void }) => {
   const services = [
     {
       title: "Ceramic Coatings",
@@ -203,7 +204,7 @@ const Services = () => {
               <p className="text-white/50 text-sm leading-relaxed mb-8 grow">{s.desc}</p>
               <div className="flex items-center justify-between mt-auto pt-6 border-t border-white/5">
                 <span className="text-2xl font-display font-medium">Starts at {s.price}</span>
-                <button className="px-6 py-3 border border-white text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+                <button onClick={onOpenModal} className="px-6 py-3 border border-white text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
                   Book Now
                 </button>
               </div>
@@ -282,7 +283,7 @@ const AdditionalServicesGrid = () => {
   );
 };
 
-const BookingCTA = () => {
+const BookingCTA = ({ onOpenModal }: { onOpenModal: () => void }) => {
   return (
     <section className="relative py-48 bg-brand-black border-t border-white/10">
       <div className="absolute inset-0 z-0">
@@ -292,7 +293,7 @@ const BookingCTA = () => {
          <div className="text-brand-blue text-[10px] font-bold uppercase tracking-[0.4em] mb-8">Ready for the Mirror Finish?</div>
          <h2 className="text-7xl md:text-9xl font-black mb-12 leading-[0.85] uppercase">LET'S GET <br /> <span className="text-outline">ACCREDITED.</span></h2>
          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <button className="px-12 py-6 bg-white text-black font-black uppercase tracking-tighter text-lg hover:bg-brand-red hover:text-white transition-all transform active:scale-95">
+            <button onClick={onOpenModal} className="px-12 py-6 bg-white text-black font-black uppercase tracking-tighter text-lg hover:bg-brand-red hover:text-white transition-all transform active:scale-95">
                Book Online 24/7
             </button>
             <div className="text-left border-l border-white/20 pl-8">
@@ -368,13 +369,88 @@ const Footer = () => {
 
 // --- Main App ---
 
+const BookingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-brand-black/90 backdrop-blur-sm">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="bg-[#111] border border-white/10 p-8 max-w-lg w-full relative"
+          >
+            <button onClick={onClose} className="absolute top-4 right-4 text-white/50 hover:text-white">
+              <X size={24} />
+            </button>
+            
+            <h3 className="text-3xl font-black uppercase mb-2">Request Booking</h3>
+            <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-8">We will contact you to confirm your appointment.</p>
+            
+            <form action="https://formsubmit.co/info@fizzautospa.com" method="POST" className="space-y-4">
+              <input type="hidden" name="_subject" value="New Booking Request - Fizz Auto Spa" />
+              <input type="hidden" name="_captcha" value="false" />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2">Name</label>
+                  <input type="text" name="name" required className="w-full bg-black/50 border border-white/10 px-4 py-3 text-sm focus:border-white/50 focus:outline-none transition-colors text-white" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2">Phone</label>
+                  <input type="tel" name="phone" required className="w-full bg-black/50 border border-white/10 px-4 py-3 text-sm focus:border-white/50 focus:outline-none transition-colors text-white" />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2">Email</label>
+                <input type="email" name="email" required className="w-full bg-black/50 border border-white/10 px-4 py-3 text-sm focus:border-white/50 focus:outline-none transition-colors text-white" />
+              </div>
+              
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2">Service</label>
+                <select name="service" required className="w-full bg-black border border-white/10 px-4 py-3 text-sm focus:border-white/50 focus:outline-none transition-colors text-white">
+                  <option value="" className="bg-[#111]">Select a service...</option>
+                  <option value="Ceramic Coating" className="bg-[#111]">Ceramic Coating</option>
+                  <option value="Paint Correction" className="bg-[#111]">Paint Correction</option>
+                  <option value="The Fizz Deluxe" className="bg-[#111]">The Fizz Deluxe Detail</option>
+                </select>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2">Preferred Date</label>
+                  <input type="date" name="date" required className="w-full bg-black/50 border border-white/10 px-4 py-3 text-sm focus:border-white/50 focus:outline-none transition-colors dark:[color-scheme:dark] text-white" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2">Time</label>
+                  <select name="time" className="w-full bg-black border border-white/10 px-4 py-3 text-sm focus:border-white/50 focus:outline-none transition-colors text-white">
+                    <option value="Morning" className="bg-[#111]">Morning</option>
+                    <option value="Afternoon" className="bg-[#111]">Afternoon</option>
+                  </select>
+                </div>
+              </div>
+              
+              <button type="submit" className="w-full py-4 bg-white text-black font-black uppercase tracking-widest text-sm hover:bg-brand-red hover:text-white transition-all mt-4">
+                Submit Request
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export default function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-brand-black selection:bg-brand-red selection:text-white">
-      <Navbar />
+      <Navbar onOpenModal={() => setIsModalOpen(true)} />
       <Hero />
       <ValueProps />
-      <Services />
+      <Services onOpenModal={() => setIsModalOpen(true)} />
       <section id="about" className="bg-brand-black py-24 border-t border-white/10">
         <div className="max-w-[1440px] mx-auto px-10 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             <div className="relative">
@@ -406,8 +482,9 @@ export default function App() {
       </section>
       <Testimonials />
       <AdditionalServicesGrid />
-      <BookingCTA />
+      <BookingCTA onOpenModal={() => setIsModalOpen(true)} />
       <Footer />
+      <BookingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }
