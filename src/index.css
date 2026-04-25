@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap');
+
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Barlow Condensed", sans-serif;
+
+  --color-brand-black: #0D0C0F;
+  --color-brand-charcoal: #19181B;
+  --color-brand-red: #EA0A0B;
+  --color-brand-blue: #007aff;
+  --color-brand-gray: #8C8B92;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-black text-white font-sans antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display uppercase tracking-tight;
+  }
+}
+
+.luxury-gradient {
+  background: linear-gradient(180deg, rgba(13, 12, 15, 0) 0%, rgba(13, 12, 15, 0.9) 100%);
+}
+
+@layer utilities {
+  .animate-pulse-slow {
+    animation: pulse-slow 20s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  .animate-scroll-line {
+    animation: scroll-line 1.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { transform: scale(1.05); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes scroll-line {
+  0% { transform: translateY(-100%); }
+  50% { transform: translateY(0); }
+  100% { transform: translateY(100%); }
+}
