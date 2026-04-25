@@ -387,7 +387,7 @@ const BookingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => voi
             <h3 className="text-3xl font-black uppercase mb-2">Request Booking</h3>
             <p className="text-[10px] text-white/40 uppercase tracking-widest font-bold mb-8">We will contact you to confirm your appointment.</p>
             
-            <form action="https://formsubmit.co/info@fizzautospa.com" method="POST" className="space-y-4">
+            <form action="https://formsubmit.co/fizzdetailinginfo@gmail.com" method="POST" className="space-y-4">
               <input type="hidden" name="_subject" value="New Booking Request - Fizz Auto Spa" />
               <input type="hidden" name="_captcha" value="false" />
               
